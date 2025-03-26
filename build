@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Download the latest deb package
+
+USERNAME="rustdesk"
+REPOSITORY="rustdesk"
+
+GIT="$USERNAME/$REPOSITORY"
+
+if ls *.deb >/dev/null 2>&1
+then
+  rm -f *.deb
+fi
+
+URL_DOWNLOAD=$(curl -s https://api.github.com/repos/$GIT/releases/latest | jq -r '.assets[] | select(.name | endswith("deb") and contains("x86_64.")) | .browser_download_url')
+wget -q --show-progress $URL_DOWNLOAD
+
